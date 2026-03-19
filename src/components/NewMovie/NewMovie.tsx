@@ -2,14 +2,6 @@ import { useState } from 'react';
 import { TextField } from '../TextField';
 import { Movie } from '../../types/Movie';
 
-// const defaultValues = {
-//   title: '',
-//   description: '',
-//   imgUrl: '',
-//   imdbUrl: '',
-//   imdbId: '',
-// };
-
 interface Props {
   onAdd: (movie: Movie) => void;
 }
@@ -17,10 +9,7 @@ interface Props {
 export const NewMovie: React.FC<Props> = ({ onAdd }) => {
   // Increase the count after successful form submission
   // to reset touched status of all the `Field`s
-  const [count] = useState(0);
-
-  // const [values, setValues] = useState<Movie>(defaultValues);
-  // const [errors, setErrors] = useState({});
+  const [count, setCount] = useState(0);
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -28,7 +17,8 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
   const [imdbUrl, setImdbUrl] = useState('');
   const [imdbId, setImdbId] = useState('');
 
-  const isButtonDisabled = !title || !imgUrl || !imdbUrl || !imdbId;
+  const isButtonDisabled =
+    !title.trim() || !imgUrl.trim() || !imdbUrl.trim() || !imdbId.trim();
 
   const reset = () => {
     setTitle('');
@@ -38,15 +28,16 @@ export const NewMovie: React.FC<Props> = ({ onAdd }) => {
     setImdbId('');
   };
 
-  const hendleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     onAdd({ title, description, imgUrl, imdbUrl, imdbId });
+    setCount(prev => prev + 1);
     reset();
   };
 
   return (
-    <form className="NewMovie" key={count} onSubmit={hendleSubmit}>
+    <form className="NewMovie" key={count} onSubmit={handleSubmit}>
       <h2 className="title">Add a movie</h2>
 
       <TextField
